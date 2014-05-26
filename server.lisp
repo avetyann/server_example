@@ -15,7 +15,7 @@
 (defparameter *lstnr* (make-instance 'utils:listener))
 
 (utils:listener-add-handler *lstnr* "/examplepath/" #'example-handler)
-(utils:listener-start *lstnr* 1488)
+(utils:listener-start *lstnr* 80)
 
 ;(pprint (recostruct "aaabbabaaabbbaaabaaabbbaaa"))
 
