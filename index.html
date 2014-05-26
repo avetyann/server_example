@@ -1,1 +1,23 @@
-/usr/local/var/www/index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+
+<script type="text/JavaScript">
+
+var xmlHttp = null;
+
+xmlHttp = new XMLHttpRequest();
+xmlHttp.open( "GET", "http://localhost:8080/examplepath/?param1=AHAHAHA", false );
+xmlHttp.setRequestHeader('Access-Control-Allow-Origin', '*');
+xmlHttp.send( null );
+
+alert(xmlHttp.responseText);
+
+
+//var sh = JSON.parse(xmlHttp.responseText);
+
+</script>
+
+</body>
+</html>
