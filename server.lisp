@@ -9,7 +9,6 @@
 (defun example-handler(req)
 	(let ((word  (tbnl:get-parameter "word"))
 			(resp "{ [ "))
-		(format t "~%|~A|~%" word)
 		(mapcar #'(lambda (str) (setf resp (format nil "~A \"~A\", " resp str)) ) (yason:encode (recostruct word)))
 		(format nil "~A \"end\" ] }" resp )))
 	
@@ -20,4 +19,3 @@
 
 ;(pprint (recostruct "aaabbabaaabbbaaabaaabbbaaa"))
 
-(yason:parse "{ \"a\" : \"b\" }")

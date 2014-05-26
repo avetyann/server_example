@@ -2,7 +2,7 @@
 (defun recostruct (word)
 	(defparameter *word* word);слово
 
-	(defparameter *subwords-set* (make-subwords-set *word* 4));Создать список всех подслов
+	(defparameter *subwords-set* (make-subwords-set *word* 2));Создать список всех подслов
 
 	(defparameter *subwords-multiset* (make-subwords-multiset *subwords-set*));Создать мультимножество подслов
 
