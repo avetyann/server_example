@@ -7,15 +7,25 @@
 (ql:quickload :yason)
 
 (defun example-handler(req)
-	(let ((word  (tbnl:get-parameter "word"))
-			(resp "{ [ "))
-		(mapcar #'(lambda (str) (setf resp (format nil "~A \"~A\", " resp str)) ) (yason:encode (recostruct word)))
-		(format nil "~A \"end\" ] }" resp )))
+	(let* ((query_str (tbnl:get-parameter "query"))
+			(query (yason:parse query_str))
+			(word_length (gethash "word_length" query))
+			(words (gethash "words" query))
+			(result  (recostruct word_length words))
+			(resp ""))
+			
+			(let ((s (make-string-output-stream)))
+				(yason:encode result s)
+				(setf resp (get-output-stream-string s)))
+			
+				resp))
 	
+
 (defparameter *lstnr* (make-instance 'utils:listener))
 
 (utils:listener-add-handler *lstnr* "/examplepath/" #'example-handler)
-(utils:listener-start *lstnr* 80)
+(utils:listener-start *lstnr* 8080)
 
 ;(pprint (recostruct "aaabbabaaabbbaaabaaabbbaaa"))
-
+;obj
+;(setf (gethash "field" obj) value)

@@ -1,6 +1,9 @@
 ;;;;Программа реконструкции слов по мультимножеству подслов
 ;;;;Нет проверок на адекватность ввода
 
+;;;Библиотека для работы с JSON
+(ql:quickload :yason)
+
 ;;;Функция возвращающая множество подслов длины n слов word образованное сдвигом 1
 (defun make-subwords-set (word n)
 	(if (< (length word) n)
@@ -192,8 +195,44 @@
 										(push (reconstruct-word x arc-set) words))
 								(aref matrix i j)))))
 		words))
-					
+		
+;;;Превратить матрицу в список списков
+(defun matrix-to-list (matrix)
+	(let ((mat nil) (lst nil))
+		(progn
+			(do ((i 0 (+ i 1)))
+				((>= i (array-dimension matrix 0)))
+					(progn
+					(do ((j 0 (+ j 1)))
+						((>= j (array-dimension matrix 1)))
+							(setf lst (cons (aref matrix i j) lst)))
+					(setf lst (reverse lst))
+					(setf mat (cons lst mat))
+					(setf lst nil)))
+			(setf mat (reverse mat)))
+		mat))	
+		
+;;;Создать хеш-таблицу дуг для JSON
+(defun make-arc-hash-json (arc-set)
+	(let ((arc-set-json (make-hash-table :test #'equal)))
+	(maphash #'(lambda (k v) 
+					(setf (gethash (format nil "~A" k) arc-set-json) 
+						  (list (arc-start v)
+						  	 	(arc-end v)
+								(arc-rep v) 
+								(arc-value v)))) arc-set)
+	arc-set-json))
 
+;;;Формируем JSON ответ								
+(defun make-response (node-set arc-set matrix finalmatrix list-of-variants)
+	(let ((response (make-hash-table :test #'equal)))
+		(setf (gethash "node-set" response) node-set)
+		(setf (gethash "arc-set" response) arc-set)
+		(setf (gethash "matrix" response) matrix)
+		(setf (gethash "result-matrix" response) finalmatrix)
+		(setf (gethash "list-of-variants" response) list-of-variants)
+	response)
+	)
 					
 		
 																																																																																	
